@@ -181,7 +181,34 @@
   </div>
 </template>
 
-<script src="js/game.js"></script>
+<script>
+  var fireballSize = 22;
 
+  var getFireballSpeed = function (left) {
+    return left ? 5 : 2
+  };
+
+  var wizardSpeed = 3;
+  var wizardWidth = 70;
+
+  var getWizardHeight = function (wizardWidth) {
+    return 1.337 * wizardWidth;
+  }
+
+  var getWizardX = function (width) {
+    var centerMapX = width / 2; // Cередина карты по х оси;
+    var centerWizardX = wizardWidth / 2 // Cередина мага по х оси;
+    return centerMapX - centerWizardX; // Центрует мага относительно карты по оси х;
+  }
+
+  var getWizardY = function (height) {
+    var heightOneThirdMap = height / 3; // Одна треть высоты карты;
+    var centerWizardY = getWizardHeight(wizardWidth) / 2; // Cередина мага по y оси;
+    return heightOneThirdMap - centerWizardY; // Позиционирую мага на высоту 2/3 от земли;
+  };
+
+</script>
+
+<script src="js/game.js"></script>
 </body>
 </html>
