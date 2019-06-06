@@ -36,21 +36,48 @@ var getRandomNumber = function (min, max) {
   return result;
 };
 
-var getRandomDiagramColor = function () {
-  var randomColor = getRandomNumber(0, 100);
-  return 'hsl(240, ' + randomColor + '%,' + ' 50%)';
+var modifyBackgroundColor = function (name) {
+  var myName = 'Вы';
+  var backgroundColor = 'rgba(255, 0, 0, 1)';
+  var getRandomDiagramColor = function () {
+    var randomColor = getRandomNumber(0, 100);
+    return 'hsl(240, ' + randomColor + '%,' + ' 50%)';
+  };
+  return name === myName ? backgroundColor : getRandomDiagramColor();
 };
 
-var renderDiagramItem = function (ctx, shiftX) {
+var getMaxValue = function (arr) {
+  var maxValue = arr[0];
+  for (var i = 0; i < arr.length; i++) {
+    var currentIndex = arr[i];
+    if (maxValue > currentIndex) {
+      maxValue = currentIndex;
+    }
+  }
+  return maxValue;
+};
+
+// var getDiagramItemHeight = function (times) {
+//   var maxTime = getMaxValue(times);
+//   var onePixel = DIAGRAM_HEIGHT / maxTime;
+// };
+
+var renderDiagramItem = function (ctx, shiftX, name, time, times) {
   var diagramCoordinateX = (shiftX || 0) + DIAGRAM_ITEM_START_COORDINATE_X;
   var diagramCoordinateY = CLOUD_LINE_HEIGHT_TEXT * CLOUD_TITLE_TEXTS.length + DIARGAM_PADDING;
-  renderRect(ctx, diagramCoordinateX + CLOUD_COORDINATE_X, diagramCoordinateY + CLOUD_COORDINATE_Y, DIAGRAM_WIDTH, DIAGRAM_HEIGHT, 'hsl(240, 100%, 50%)');
+  var backgroundColor = 'rgba(255, 0, 0, 1)';
+  backgroundColor = modifyBackgroundColor(name);
+  var maxTime = getMaxValue(times);
+  var diagramHeight = Math.round((time * DIAGRAM_HEIGHT) / maxTime);
+  console.log(diagramHeight)
+  console.log(maxTime);
+  renderRect(ctx, diagramCoordinateX + CLOUD_COORDINATE_X, diagramCoordinateY + CLOUD_COORDINATE_Y, DIAGRAM_WIDTH, diagramHeight, backgroundColor);
 };
 
-var renderDiagramItems = function (ctx) {
+var renderDiagramItems = function (ctx, names, times) {
   var counterShiftX = 0;
-  for (var i = 0; i < 4; i++) {
-    renderDiagramItem(ctx, counterShiftX);
+  for (var i = 0; i < names.length; i++) {
+    renderDiagramItem(ctx, counterShiftX, names[i], times[i], times);
     counterShiftX += DIAGRAM_WIDTH / 2 + DIAGRAM_ITEM_SHIFT;
   }
 };
@@ -78,5 +105,5 @@ var renderCloudTitle = function (ctx, arrTexts, font, coordinateX) {
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_WIDTH, CLOUD_HEIGHT);
   renderCloudTitle(ctx, CLOUD_TITLE_TEXTS, '16px PT Mono', CLOUD_WIDTH / 2);
-  renderDiagramItems(ctx);
+  renderDiagramItems(ctx, names, times);
 };
