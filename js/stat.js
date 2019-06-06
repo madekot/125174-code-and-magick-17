@@ -1,24 +1,29 @@
 'use strict';
 
 var CLOUD_WIDTH = 420;
-var CLOUD_HEIGHT = 200;
+var CLOUD_HEIGHT = 270;
 var CLOUD_COLOR = 'white';
 var CLOUD_COORDINATE_X = 100;
 var CLOUD_COORDINATE_Y = 10;
-var CLOUD_LINE_HEIGHT_TEXT = 16;
+var CLOUD_LINE_HEIGHT_TEXT = 20;
 
 var CLOUD_SHADOW_COLOR = 'rgba(0, 0, 0, 0.7)';
 var CLOUD_SHADOW_GAP = 10;
-var CLOUD_SHADOW_COORDINATE_X = CLOUD_COORDINATE_X + CLOUD_SHADOW_GAP;
-var CLOUD_SHADOW_COORDINATE_Y = CLOUD_COORDINATE_Y + CLOUD_SHADOW_GAP;
+var cloudShadowCoordinateX = CLOUD_COORDINATE_X + CLOUD_SHADOW_GAP;
+var cloudShadowCoordinateY = CLOUD_COORDINATE_Y + CLOUD_SHADOW_GAP;
 
 var CLOUD_TITLE_TEXTS = ['Ура вы победили!', 'Список результатов:'];
+var textHeight = CLOUD_LINE_HEIGHT_TEXT * CLOUD_TITLE_TEXTS.length;
+var START_COORDINATE_Y = 10;
 
 var DIAGRAM_WIDTH = 40;
 var DIAGRAM_HEIGHT = 150;
-var DIARGAM_PADDING = 15;
+var DIARGAM_PADDING_TOP = 50;
 var DIAGRAM_ITEM_START_COORDINATE_X = 85;
 var DIAGRAM_ITEM_SHIFT = 50;
+
+var DIAGRAM_TEXT_PADDING_TOP = 20;
+var DIAGRAM_TEXT_PADDING_BOTTOM = 10;
 
 var renderRect = function (ctx, coordinateX, coordinateY, width, height, backgroundColor) {
   ctx.fillStyle = backgroundColor;
@@ -26,8 +31,19 @@ var renderRect = function (ctx, coordinateX, coordinateY, width, height, backgro
 };
 
 var renderCloud = function (ctx, cloudWidth, cloudHeight) {
-  renderRect(ctx, CLOUD_SHADOW_COORDINATE_X, CLOUD_SHADOW_COORDINATE_Y, cloudWidth, cloudHeight, CLOUD_SHADOW_COLOR);
+  renderRect(ctx, cloudShadowCoordinateX, cloudShadowCoordinateY, cloudWidth, cloudHeight, CLOUD_SHADOW_COLOR);
   renderRect(ctx, CLOUD_COORDINATE_X, CLOUD_COORDINATE_Y, cloudWidth, cloudHeight, CLOUD_COLOR);
+};
+
+var renderText = function (ctx, text, font, coordinateX, coordinateY, color, baseline) {
+  ctx.fillStyle = color || 'black';
+  ctx.font = font;
+  ctx.textBaseline = baseline || 'hanging';
+  ctx.fillText(text, coordinateX, coordinateY);
+};
+
+var renderTextDiagramItem = function (ctx, text, coordinateX, coordinateY, color) {
+  return renderText(ctx, text, undefined, coordinateX, coordinateY, color);
 };
 
 var getRandomNumber = function (min, max) {
@@ -57,21 +73,16 @@ var getMaxValue = function (arr) {
   return maxValue;
 };
 
-// var getDiagramItemHeight = function (times) {
-//   var maxTime = getMaxValue(times);
-//   var onePixel = DIAGRAM_HEIGHT / maxTime;
-// };
-
 var renderDiagramItem = function (ctx, shiftX, name, time, times) {
-  var diagramCoordinateX = (shiftX || 0) + DIAGRAM_ITEM_START_COORDINATE_X;
-  var diagramCoordinateY = CLOUD_LINE_HEIGHT_TEXT * CLOUD_TITLE_TEXTS.length + DIARGAM_PADDING;
   var backgroundColor = 'rgba(255, 0, 0, 1)';
   backgroundColor = modifyBackgroundColor(name);
-  var maxTime = getMaxValue(times);
-  var diagramHeight = Math.round((time * DIAGRAM_HEIGHT) / maxTime);
-  console.log(diagramHeight)
-  console.log(maxTime);
-  renderRect(ctx, diagramCoordinateX + CLOUD_COORDINATE_X, diagramCoordinateY + CLOUD_COORDINATE_Y, DIAGRAM_WIDTH, diagramHeight, backgroundColor);
+  var maxTimePlayer = getMaxValue(times);
+  var diagramHeight = Math.round((maxTimePlayer / time) * DIAGRAM_HEIGHT);
+  var diagramCoordinateX = shiftX + DIAGRAM_ITEM_START_COORDINATE_X + CLOUD_COORDINATE_X;
+  var diagramCoordinateY = CLOUD_COORDINATE_Y + DIARGAM_PADDING_TOP + textHeight + (DIAGRAM_HEIGHT - diagramHeight);
+  renderRect(ctx, diagramCoordinateX, diagramCoordinateY, DIAGRAM_WIDTH, diagramHeight, backgroundColor);
+  renderTextDiagramItem(ctx, name, diagramCoordinateX, diagramCoordinateY - DIAGRAM_TEXT_PADDING_TOP, backgroundColor);
+  renderTextDiagramItem(ctx, Math.round(time), diagramCoordinateX, diagramCoordinateY + DIAGRAM_TEXT_PADDING_BOTTOM + diagramHeight, backgroundColor);
 };
 
 var renderDiagramItems = function (ctx, names, times) {
@@ -80,13 +91,6 @@ var renderDiagramItems = function (ctx, names, times) {
     renderDiagramItem(ctx, counterShiftX, names[i], times[i], times);
     counterShiftX += DIAGRAM_WIDTH / 2 + DIAGRAM_ITEM_SHIFT;
   }
-};
-
-var renderText = function (ctx, text, font, coordinateX, coordinateY, color, baseline) {
-  ctx.fillStyle = color || 'black';
-  ctx.font = font;
-  ctx.textBaseline = baseline || 'hanging';
-  ctx.fillText(text, coordinateX, coordinateY);
 };
 
 var renderTextLines = function (ctx, arrTexts, lineHeight, font, baseline, color, coordinateX, startCoordinateY) {
@@ -98,12 +102,12 @@ var renderTextLines = function (ctx, arrTexts, lineHeight, font, baseline, color
   }
 };
 
-var renderCloudTitle = function (ctx, arrTexts, font, coordinateX) {
-  return renderTextLines(ctx, arrTexts, undefined, font, undefined, undefined, coordinateX);
+var renderCloudTitle = function (ctx, arrTexts, font, coordinateX, startCoordinateY) {
+  return renderTextLines(ctx, arrTexts, undefined, font, undefined, undefined, coordinateX, startCoordinateY);
 };
 
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_WIDTH, CLOUD_HEIGHT);
-  renderCloudTitle(ctx, CLOUD_TITLE_TEXTS, '16px PT Mono', CLOUD_WIDTH / 2);
+  renderCloudTitle(ctx, CLOUD_TITLE_TEXTS, '16px PT Mono', CLOUD_WIDTH / 2, START_COORDINATE_Y);
   renderDiagramItems(ctx, names, times);
 };
