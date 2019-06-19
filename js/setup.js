@@ -87,6 +87,26 @@ var userNameFieldElement = setupElement.querySelector('.setup-user-name');
 var setupOpenButtonElement = document.querySelector('.setup-open');
 var setupCloseButtonElement = setupElement.querySelector('.setup-close');
 
+var getPositionCoordinatesElement = function (element) {
+  return {
+    x: element.offsetTop,
+    y: element.offsetLeft
+  };
+};
+
+var isFirstWindowOpening = true;
+var startCoordinatesSetupElementPopap;
+
+var restartPositionPopap = function () {
+  if (isFirstWindowOpening) {
+    startCoordinatesSetupElementPopap = getPositionCoordinatesElement(setupElement);
+    isFirstWindowOpening = false;
+  } else {
+    setupElement.style.top = startCoordinatesSetupElementPopap.x + 'px';
+    setupElement.style.left = startCoordinatesSetupElementPopap.y + 'px';
+  }
+};
+
 var openSetupElement = function () {
   setupElement.classList.remove('hidden');
   userNameFieldElement.focus();
@@ -95,6 +115,7 @@ var openSetupElement = function () {
   wizardCoat.addEventListener('click', onWizardCoatClick);
   wizardEyes.addEventListener('click', onWizardEyesClick);
   wizardFireballColor.addEventListener('click', onWizardFireballColorClick);
+  restartPositionPopap();
 };
 
 var closeSetupElement = function () {
@@ -169,45 +190,3 @@ var onWizardFireballColorClick = function () {
   wizardFireballColor.style.backgroundColor = color;
   wizardFireballColorInputHidden.value = color;
 };
-
-// в движении
-
-// Перетаскивание окна настроек персонажа
-var avatarIconPlayerElement = setupElement.querySelector('.upload'); // ручка перетаскивания
-var inputIconElement = avatarIconPlayerElement.querySelector('[type="file"]');
-
-inputIconElement.addEventListener('click', function (evt) {
-  evt.preventDefault();
-});
-
-avatarIconPlayerElement.addEventListener('mousedown', function (mouseDownEvt) {
-  mouseDownEvt.preventDefault();
-  var startingCoordinatesMouse = {
-    x: mouseDownEvt.clientX,
-    y: mouseDownEvt.clientY
-  };
-
-  var onSetupElementMouseMove = function (mouseMoveEvt) {
-    mouseMoveEvt.preventDefault();
-    var shiftCoordinatesMouse = {
-      x: startingCoordinatesMouse.x - mouseMoveEvt.clientX,
-      y: startingCoordinatesMouse.y - mouseMoveEvt.clientY
-    };
-
-    startingCoordinatesMouse = {
-      x: mouseMoveEvt.clientX,
-      y: mouseMoveEvt.clientY
-    };
-
-    setupElement.style.left = (setupElement.offsetLeft - shiftCoordinatesMouse.x) + 'px';
-    setupElement.style.top = (setupElement.offsetTop - shiftCoordinatesMouse.y) + 'px';
-  };
-  document.addEventListener('mousemove', onSetupElementMouseMove);
-
-  var onSetupElementMouseUp = function (mouseUpEvt) {
-    mouseUpEvt.preventDefault();
-    document.removeEventListener('mousemove', onSetupElementMouseMove);
-    document.removeEventListener('mouseup', onSetupElementMouseUp);
-  };
-  document.addEventListener('mouseup', onSetupElementMouseUp);
-});
