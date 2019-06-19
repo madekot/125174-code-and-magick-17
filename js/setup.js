@@ -169,3 +169,45 @@ var onWizardFireballColorClick = function () {
   wizardFireballColor.style.backgroundColor = color;
   wizardFireballColorInputHidden.value = color;
 };
+
+// в движении
+
+// Перетаскивание окна настроек персонажа
+var avatarIconPlayerElement = setupElement.querySelector('.upload'); // ручка перетаскивания
+var inputIconElement = avatarIconPlayerElement.querySelector('[type="file"]');
+
+inputIconElement.addEventListener('click', function (evt) {
+  evt.preventDefault();
+});
+
+avatarIconPlayerElement.addEventListener('mousedown', function (mouseDownEvt) {
+  mouseDownEvt.preventDefault();
+  var startingCoordinatesMouse = {
+    x: mouseDownEvt.clientX,
+    y: mouseDownEvt.clientY
+  };
+
+  var onSetupElementMouseMove = function (mouseMoveEvt) {
+    mouseMoveEvt.preventDefault();
+    var shiftCoordinatesMouse = {
+      x: startingCoordinatesMouse.x - mouseMoveEvt.clientX,
+      y: startingCoordinatesMouse.y - mouseMoveEvt.clientY
+    };
+
+    startingCoordinatesMouse = {
+      x: mouseMoveEvt.clientX,
+      y: mouseMoveEvt.clientY
+    };
+
+    setupElement.style.left = (setupElement.offsetLeft - shiftCoordinatesMouse.x) + 'px';
+    setupElement.style.top = (setupElement.offsetTop - shiftCoordinatesMouse.y) + 'px';
+  };
+  document.addEventListener('mousemove', onSetupElementMouseMove);
+
+  var onSetupElementMouseUp = function (mouseUpEvt) {
+    mouseUpEvt.preventDefault();
+    document.removeEventListener('mousemove', onSetupElementMouseMove);
+    document.removeEventListener('mouseup', onSetupElementMouseUp);
+  };
+  document.addEventListener('mouseup', onSetupElementMouseUp);
+});
