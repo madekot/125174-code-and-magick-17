@@ -1,15 +1,13 @@
 'use strict';
 
-var QUANTITY_WIZARDS_MOCK = 4;
-
-var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var SECOND_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
-
 var KEY_CODE_ENTER = 13;
 var KEY_CODE_ESC = 27;
+var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+var QUANTITY_WIZARDS_MOCK = 4;
+var SECOND_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 
 var setupElement = document.querySelector('.setup');
 
@@ -19,7 +17,7 @@ var getRandomNumber = function (min, max) {
   return result;
 };
 
-var getRandomArrayValue = function (arr) {
+var getRandomArrayElement = function (arr) {
   return arr[getRandomNumber(0, arr.length - 1)];
 };
 
@@ -29,8 +27,8 @@ var hasRandomBoolean = function () {
 
 var getFullName = function (names, secondName) {
   var mixName = function () {
-    var firstOrder = getRandomArrayValue(names) + ' ' + getRandomArrayValue(secondName);
-    var secondOrder = getRandomArrayValue(secondName) + ' ' + getRandomArrayValue(names);
+    var firstOrder = getRandomArrayElement(names) + ' ' + getRandomArrayElement(secondName);
+    var secondOrder = getRandomArrayElement(secondName) + ' ' + getRandomArrayElement(names);
     return hasRandomBoolean() ? firstOrder : secondOrder;
   };
   return mixName(names, secondName);
@@ -39,8 +37,8 @@ var getFullName = function (names, secondName) {
 var createCharacteristicWizard = function (names, secondName, coatColor, eyesColor) {
   return {
     name: getFullName(names, secondName),
-    coatColor: getRandomArrayValue(coatColor),
-    eyesColor: getRandomArrayValue(eyesColor),
+    coatColor: getRandomArrayElement(coatColor),
+    eyesColor: getRandomArrayElement(eyesColor),
   };
 };
 
@@ -141,11 +139,11 @@ var onSetupCloseButtonElementKeyDown = function (evt) {
 var wizardSetup = setupElement.querySelector('.setup-player');
 
 var getCoatColor = function (CoatColor) {
-  return getRandomArrayValue(CoatColor);
+  return getRandomArrayElement(CoatColor);
 };
 
 var getEyesColor = function (CoatColor) {
-  return getRandomArrayValue(CoatColor);
+  return getRandomArrayElement(CoatColor);
 };
 
 var wizardCoat = wizardSetup.querySelector('.wizard-coat');
