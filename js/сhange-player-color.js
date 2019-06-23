@@ -13,7 +13,7 @@
 
   var wizardCoat = wizardSetup.querySelector('.wizard-coat');
 
-  var addColorsListeners = function () {
+  var addColorListeners = function () {
     wizardCoat.addEventListener('click', onWizardCoatClick);
     wizardEyes.addEventListener('click', onWizardEyesClick);
     wizardFireballColor.addEventListener('click', onWizardFireballColorClick);
@@ -48,8 +48,8 @@
     wizardFireballColorInputHidden.value = color;
   };
 
-  window.ChangePlayerColor = {
-    addColorsListeners: addColorsListeners,
+  window.сhangePlayerColor = {
+    addColorsListeners: addColorListeners,
     removeColorsListeners: removeColorsListeners
   };
 })();

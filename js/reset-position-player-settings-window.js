@@ -1,19 +1,15 @@
 'use strict';
 (function () {
-  var getPositionCoordinatesElement = function (element) {
-    return {
-      x: element.offsetTop,
-      y: element.offsetLeft
-    };
-  };
-
-  var isFirstWindowOpening = true;
+  var isWindowFirstOpening = true;
   var startCoordinatesSetupElementPopap;
 
   var restartPositionPopap = function () {
-    if (isFirstWindowOpening) {
-      startCoordinatesSetupElementPopap = getPositionCoordinatesElement(window.dialog.setupElement);
-      isFirstWindowOpening = false;
+    if (isWindowFirstOpening) {
+      startCoordinatesSetupElementPopap = {
+        x: window.dialog.setupElement.offsetTop,
+        y: window.dialog.setupElement.offsetLeft
+      };
+      isWindowFirstOpening = false;
     } else {
       window.dialog.setupElement.style.top = startCoordinatesSetupElementPopap.x + 'px';
       window.dialog.setupElement.style.left = startCoordinatesSetupElementPopap.y + 'px';

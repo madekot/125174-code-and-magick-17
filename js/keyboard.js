@@ -4,10 +4,10 @@
   var KEY_CODE_ESC = 27;
 
   window.keyboard = {
-    isEventEnter: function (evt) {
+    isEnterPressed: function (evt) {
       return evt.keyCode === KEY_CODE_ENTER;
     },
-    isEventEsc: function (evt) {
+    isEscPressed: function (evt) {
       return evt.keyCode === KEY_CODE_ESC;
     }
   };

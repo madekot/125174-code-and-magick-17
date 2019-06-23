@@ -1,20 +1,20 @@
 'use strict';
 (function () {
-  var getStartingCoordinatesMouse = function (mouseEvt) {
+  var getMouseStartingCoordinates = function (mouseEvt) {
     return {
       x: mouseEvt.clientX,
       y: mouseEvt.clientY
     };
   };
 
-  var getShiftCoordinatesMouse = function (mouseStartCoordinatesX, mouseStartCoordinatesY, mouseMoveEvt) {
+  var getMouseShiftCoordinates = function (mouseStartCoordinatesX, mouseStartCoordinatesY, mouseMoveEvt) {
     return {
       x: mouseStartCoordinatesX - mouseMoveEvt.clientX,
       y: mouseStartCoordinatesY - mouseMoveEvt.clientY
     };
   };
 
-  var setOffsetCoordDragElement = function (DragElement, shiftCoordinatesMouseX, shiftCoordinatesMouseY) {
+  var setDragElementOffsetCoord = function (DragElement, shiftCoordinatesMouseX, shiftCoordinatesMouseY) {
     DragElement.style.left = (DragElement.offsetLeft - shiftCoordinatesMouseX) + 'px';
     DragElement.style.top = (DragElement.offsetTop - shiftCoordinatesMouseY) + 'px';
   };
@@ -24,16 +24,17 @@
 
     pinElement.addEventListener('mousedown', function (mouseDownEvt) {
       mouseDownEvt.preventDefault();
-      var startingCoordinatesMouse = getStartingCoordinatesMouse(mouseDownEvt);
+      var startingCoordinatesMouse = getMouseStartingCoordinates(mouseDownEvt);
       var isDragged = false;
 
       var onSetupElementMouseMove = function (mouseMoveEvt) {
         mouseMoveEvt.preventDefault();
         isDragged = true;
-        var shiftCoordinatesMouse = getShiftCoordinatesMouse(startingCoordinatesMouse.x, startingCoordinatesMouse.y, mouseMoveEvt);
-        startingCoordinatesMouse = getStartingCoordinatesMouse(mouseMoveEvt);
-        setOffsetCoordDragElement(DragElement, shiftCoordinatesMouse.x, shiftCoordinatesMouse.y);
+        var shiftCoordinatesMouse = getMouseShiftCoordinates(startingCoordinatesMouse.x, startingCoordinatesMouse.y, mouseMoveEvt);
+        startingCoordinatesMouse = getMouseStartingCoordinates(mouseMoveEvt);
+        setDragElementOffsetCoord(DragElement, shiftCoordinatesMouse.x, shiftCoordinatesMouse.y);
       };
+      document.addEventListener('mousemove', onSetupElementMouseMove);
 
       var onSetupElementMouseUp = function (mouseUpEvt) {
         mouseUpEvt.preventDefault();
@@ -48,16 +49,14 @@
           pinElement.addEventListener('click', onClickPreventDefault);
         }
       };
-
-      document.addEventListener('mousemove', onSetupElementMouseMove);
       document.addEventListener('mouseup', onSetupElementMouseUp);
     });
   };
 
   window.dragAndDrop = {
-    startMouseCoord: getStartingCoordinatesMouse,
-    shiftMouseCoord: getShiftCoordinatesMouse,
-    setOffsetCoord: setOffsetCoordDragElement,
+    startMouseCoord: getMouseStartingCoordinates,
+    shiftMouseCoord: getMouseShiftCoordinates,
+    setOffsetCoord: setDragElementOffsetCoord,
     add: addDragAndDrop,
   };
 })();

@@ -6,12 +6,9 @@
   var SECOND_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 
   var getFullName = function (names, secondName) {
-    var mixName = function () {
-      var firstOrder = window.random.arrayElement(names) + ' ' + window.random.arrayElement(secondName);
-      var secondOrder = window.random.arrayElement(secondName) + ' ' + window.random.arrayElement(names);
-      return window.random.boolean ? firstOrder : secondOrder;
-    };
-    return mixName(names, secondName);
+    var firstOrder = window.random.arrayElement(names) + ' ' + window.random.arrayElement(secondName);
+    var secondOrder = window.random.arrayElement(secondName) + ' ' + window.random.arrayElement(names);
+    return window.random.boolean ? firstOrder : secondOrder;
   };
 
   var createCharacteristicWizard = function (names, secondName, coatColor, eyesColor) {

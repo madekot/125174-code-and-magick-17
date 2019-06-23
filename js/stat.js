@@ -1,29 +1,26 @@
 'use strict';
 (function () {
-  var CLOUD_WIDTH = 420;
-  var CLOUD_HEIGHT = 270;
   var CLOUD_COLOR = 'white';
   var CLOUD_COORDINATE_X = 100;
   var CLOUD_COORDINATE_Y = 10;
+  var CLOUD_HEIGHT = 270;
   var CLOUD_LINE_HEIGHT_TEXT = 20;
-
   var CLOUD_SHADOW_COLOR = 'rgba(0, 0, 0, 0.7)';
   var CLOUD_SHADOW_GAP = 10;
-  var cloudShadowCoordinateX = CLOUD_COORDINATE_X + CLOUD_SHADOW_GAP;
-  var cloudShadowCoordinateY = CLOUD_COORDINATE_Y + CLOUD_SHADOW_GAP;
-
   var CLOUD_TITLE_TEXTS = ['Ура вы победили!', 'Список результатов:'];
-  var textHeight = CLOUD_LINE_HEIGHT_TEXT * CLOUD_TITLE_TEXTS.length;
+  var CLOUD_WIDTH = 420;
+  var DIAGRAM_HEIGHT = 150;
+  var DIAGRAM_ITEM_SHIFT = 50;
+  var DIAGRAM_ITEM_START_COORDINATE_X = 85;
+  var DIAGRAM_TEXT_PADDING_BOTTOM = 10;
+  var DIAGRAM_TEXT_PADDING_TOP = 20;
+  var DIAGRAM_WIDTH = 40;
+  var DIARGAM_PADDING_TOP = 50;
   var START_COORDINATE_Y = 10;
 
-  var DIAGRAM_WIDTH = 40;
-  var DIAGRAM_HEIGHT = 150;
-  var DIARGAM_PADDING_TOP = 50;
-  var DIAGRAM_ITEM_START_COORDINATE_X = 85;
-  var DIAGRAM_ITEM_SHIFT = 50;
-
-  var DIAGRAM_TEXT_PADDING_TOP = 20;
-  var DIAGRAM_TEXT_PADDING_BOTTOM = 10;
+  var cloudShadowCoordinateX = CLOUD_COORDINATE_X + CLOUD_SHADOW_GAP;
+  var cloudShadowCoordinateY = CLOUD_COORDINATE_Y + CLOUD_SHADOW_GAP;
+  var textHeight = CLOUD_LINE_HEIGHT_TEXT * CLOUD_TITLE_TEXTS.length;
 
   var renderCloud = function (ctx, cloudWidth, cloudHeight) {
     window.canvas.rect(ctx, cloudShadowCoordinateX, cloudShadowCoordinateY, cloudWidth, cloudHeight, CLOUD_SHADOW_COLOR);
