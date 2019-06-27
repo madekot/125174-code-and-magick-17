@@ -66,5 +66,6 @@
 
   window.dialog = {
     setupElement: setupElement,
+    close: closeSetupElement,
   };
 })();
