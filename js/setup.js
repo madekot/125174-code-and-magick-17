@@ -1,33 +1,7 @@
 'use strict';
 
 (function () {
-  var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var QUANTITY_WIZARDS_MOCK = 4;
-  var SECOND_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-
-  var getFullName = function (names, secondName) {
-    var firstOrder = window.random.arrayElement(names) + ' ' + window.random.arrayElement(secondName);
-    var secondOrder = window.random.arrayElement(secondName) + ' ' + window.random.arrayElement(names);
-    return window.random.boolean ? firstOrder : secondOrder;
-  };
-
-  var createCharacteristicWizard = function (names, secondName, coatColor, eyesColor) {
-    return {
-      name: getFullName(names, secondName),
-      coatColor: window.random.arrayElement(coatColor),
-      eyesColor: window.random.arrayElement(eyesColor),
-    };
-  };
-
-  var createCharacteristicWizards = function (quantityWizards, names, secondName, coatColor, eyesColor) {
-    var result = [];
-    for (var i = 0; i < quantityWizards; i++) {
-      result[i] = createCharacteristicWizard(names, secondName, coatColor, eyesColor);
-    }
-    return result;
-  };
-
-  var mockCharacteristicWizards = createCharacteristicWizards(QUANTITY_WIZARDS_MOCK, NAMES, SECOND_NAMES, window.wizardData.color.coat, window.wizardData.color.eyes);
+  var QUANTITY_WIZARDS = 4;
 
   var templateElement = document.querySelector('#similar-wizard-template');
   var templateWizard = templateElement.content.querySelector('.setup-similar-item');
@@ -45,16 +19,29 @@
     return wizardElement;
   };
 
-  var createWizardElements = function (parrentElement, mockArr) {
+  var createWizardElements = function (dataArr) {
     var fragment = document.createDocumentFragment();
-    mockArr.forEach(function (wizard) {
-      var wizardElement = createWizardElement(templateWizard, wizard.name, wizard.coatColor, wizard.eyesColor);
+    for (var i = 0; i < QUANTITY_WIZARDS; i++) {
+      var wizard = window.random.arrayElement(dataArr);
+      var wizardElement = createWizardElement(templateWizard, wizard.name, wizard.colorCoat, wizard.colorEyes);
       fragment.appendChild(wizardElement);
-    });
-    parrentElement.appendChild(fragment);
+    }
+    setupSimilarList.appendChild(fragment);
   };
 
-  createWizardElements(setupSimilarList, mockCharacteristicWizards);
+  var onError = function (message) {
+    window.errorPopap.show(message);
+  };
+
+  var onLoad = function () {
+    window.dialog.close();
+  };
+
+  window.backend.load(createWizardElements, onError);
+  window.backend.load(onLoad, onError);
+
+  var formElement = document.querySelector('.setup-wizard-form');
+  window.backend.save(formElement, onLoad, onError);
 
   var setupSimilar = document.querySelector('.setup-similar');
   setupSimilar.classList.remove('hidden');
