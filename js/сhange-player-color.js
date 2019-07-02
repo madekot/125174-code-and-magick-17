@@ -25,19 +25,27 @@
     wizardFireballColor.removeEventListener('click', onWizardFireballColorClick);
   };
 
+  var coatColor = wizardCoat.style.fill;
   var wizardCoatInputHidden = wizardSetup.querySelector('[name="coat-color"]');
   var onWizardCoatClick = function () {
-    var color = getCoatColor(window.wizardData.color.coat);
-    wizardCoat.style.fill = color;
-    wizardCoatInputHidden.value = color;
+    coatColor = getCoatColor(window.wizardData.color.coat);
+    wizardCoat.style.fill = coatColor;
+    wizardCoatInputHidden.value = coatColor;
+    window.debounce(function () {
+      window.filter.updateWizards();
+    });
   };
 
   var wizardEyes = wizardSetup.querySelector('.wizard-eyes');
   var wizardEyesInputHidden = wizardSetup.querySelector('[name="eyes-color"]');
+  var eyesColor = wizardEyesInputHidden.value;
   var onWizardEyesClick = function () {
-    var color = getEyesColor(window.wizardData.color.eyes);
-    wizardEyes.style.fill = color;
-    wizardEyesInputHidden.value = color;
+    eyesColor = getEyesColor(window.wizardData.color.eyes);
+    wizardEyes.style.fill = eyesColor;
+    wizardEyesInputHidden.value = eyesColor;
+    window.debounce(function () {
+      window.filter.updateWizards();
+    });
   };
 
   var wizardFireballColor = wizardSetup.querySelector('.setup-fireball-wrap');
@@ -48,8 +56,16 @@
     wizardFireballColorInputHidden.value = color;
   };
 
+  var getColorPlayerWizard = function () {
+    return {
+      coat: coatColor,
+      eyes: eyesColor,
+    };
+  };
+
   window.сhangePlayerColor = {
     addColorsListeners: addColorListeners,
+    getColorPlayerWizard: getColorPlayerWizard,
     removeColorsListeners: removeColorsListeners
   };
 })();

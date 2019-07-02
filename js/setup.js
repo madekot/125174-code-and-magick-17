@@ -19,25 +19,27 @@
     return wizardElement;
   };
 
-  var createWizardElements = function (dataArr) {
+  var createWizardElements = function (dataArr, quantityWizards) {
+    var quantity = quantityWizards || QUANTITY_WIZARDS;
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < QUANTITY_WIZARDS; i++) {
-      var wizard = window.random.arrayElement(dataArr);
+    for (var i = 0; i < quantity; i++) {
+      var wizard = dataArr[i];
       var wizardElement = createWizardElement(templateWizard, wizard.name, wizard.colorCoat, wizard.colorEyes);
       fragment.appendChild(wizardElement);
     }
     setupSimilarList.appendChild(fragment);
   };
 
+  var onLoad = function (data) {
+    window.dialog.close();
+    // createWizardElements(data);
+    window.filter.updateWizards(data)
+  };
+
   var onError = function (message) {
     window.errorPopap.show(message);
   };
 
-  var onLoad = function () {
-    window.dialog.close();
-  };
-
-  window.backend.load(createWizardElements, onError);
   window.backend.load(onLoad, onError);
 
   var formElement = document.querySelector('.setup-wizard-form');
@@ -45,4 +47,8 @@
 
   var setupSimilar = document.querySelector('.setup-similar');
   setupSimilar.classList.remove('hidden');
+
+  window.setup = {
+    createWizardElements: createWizardElements,
+  };
 })();
