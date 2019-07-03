@@ -41,8 +41,9 @@
 
   var updateWizards = function (data) {
     var wizards = data || window.backend.data();
+    var wizardsClone = wizards.slice();
     clearWizards();
-    var similarityBallsWizards = setSimilarityRanks(wizards);
+    var similarityBallsWizards = setSimilarityRanks(wizardsClone);
     var sortingData = getSortRank(similarityBallsWizards);
     window.setup.createWizardElements(sortingData);
   };
