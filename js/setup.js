@@ -30,21 +30,6 @@
     setupSimilarList.appendChild(fragment);
   };
 
-  var onLoad = function (data) {
-    window.dialog.close();
-    // createWizardElements(data);
-    window.filter.updateWizards(data)
-  };
-
-  var onError = function (message) {
-    window.errorPopap.show(message);
-  };
-
-  window.backend.load(onLoad, onError);
-
-  var formElement = document.querySelector('.setup-wizard-form');
-  window.backend.save(formElement, onLoad, onError);
-
   var setupSimilar = document.querySelector('.setup-similar');
   setupSimilar.classList.remove('hidden');
 

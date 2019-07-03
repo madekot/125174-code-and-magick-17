@@ -1,6 +1,7 @@
 'use strict';
 (function () {
-  var SET_TIMEOUT = 10000; // 10s
+  var SET_TIMEOUT = 10000;
+  var formElement = document.querySelector('.setup-wizard-form');
 
   var addListenerLoad = function (xhr, onLoad, onError) {
     xhr.addEventListener('load', function () {
@@ -74,8 +75,29 @@
     });
   };
 
+  var dataWizards = [];
+  var getDataWizard = function () {
+    return dataWizards;
+  };
+
+  var onLoad = function (data) {
+    dataWizards = data;
+    window.dialog.close();
+    window.filter.updateWizards(getDataWizard());
+  };
+
+  var onSave = function () {
+    window.dialog.close();
+  };
+
+  var onError = function (message) {
+    window.errorPopup.show(message);
+  };
+
+  load(onLoad, onError);
+  save(formElement, onSave, onError);
+
   window.backend = {
-    load: load,
-    save: save,
+    data: getDataWizard,
   };
 })();

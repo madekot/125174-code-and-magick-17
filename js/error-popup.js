@@ -15,7 +15,7 @@
   var TEXT_LINE_HEIGHT = 350;
   var TEXT_TAG_NAME = 'h3';
 
-  var createPopap = function () {
+  var createPopup = function () {
     var element = document.createElement('div');
     element.style.position = POPUP_POSITION;
     element.style.zIndex = POPUP_OZ_INDEX;
@@ -44,12 +44,12 @@
   };
 
   var showError = function (textError) {
-    var popap = createPopap();
+    var popup = createPopup();
     var text = createText(textError);
-    popap.appendChild(text);
-    document.body.appendChild(popap);
+    popup.appendChild(text);
+    document.body.appendChild(popup);
   };
-  window.errorPopap = {
+  window.errorPopup = {
     show: showError,
   };
 })();

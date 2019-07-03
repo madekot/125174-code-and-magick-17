@@ -2,19 +2,16 @@
 (function () {
   var Z_INDEX_STAR_ELEMENT = 100;
 
-  // Перетаскивает окно настроек персонажа
   var setupElement = document.querySelector('.setup');
   var avatarIconPlayerElement = setupElement.querySelector('.upload'); // ручка перетаскивания
 
   window.dragAndDrop.add(avatarIconPlayerElement, setupElement);
 
-  // Перетаскивает звузду из инвентаря настроек персонажа
   var startElement = setupElement.querySelector('[alt="Star"]');
   startElement.style.position = 'absolute';
   startElement.style.zIndex = Z_INDEX_STAR_ELEMENT;
   window.dragAndDrop.add(startElement);
 
-  // Открытие/закрытие окна настройки персонажа
   var userNameFieldElement = setupElement.querySelector('.setup-user-name');
   var setupOpenButtonElement = document.querySelector('.setup-open');
   var setupCloseButtonElement = setupElement.querySelector('.setup-close');

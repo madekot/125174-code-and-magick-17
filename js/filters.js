@@ -1,22 +1,28 @@
 'use strict';
 (function () {
-  var POINTS_CLOAK_NUMBER = 2;
-  var POINTS_EYES_NUMBER = 1;
+  var CLOAK_RATING = 2;
+  var EYE_RATING = 1;
 
-  var onError = function (message) {
-    window.errorPopap.show(message);
-  };
+  var setSimilarityRank = function (wizard) {
 
-  var dataWizards = [];
-  var onLoad = function (data) {
-    dataWizards = data;
+    var colorPlayerWizard = window.сhangePlayerColor.getColorPlayerWizard();
+    var similarityBall = 0;
+    if (wizard.colorCoat === colorPlayerWizard.coat) {
+      similarityBall += CLOAK_RATING;
+    }
+
+    if (wizard.colorEyes === colorPlayerWizard.eyes) {
+      similarityBall += EYE_RATING;
+    }
+
+    wizard.similarityBall = similarityBall;
+    return wizard;
   };
 
   var setSimilarityRanks = function (wizards) {
-    for (var i = 0; i < wizards.length; i++) {
-      var wizard = wizards[i];
+    wizards.forEach(function (wizard) {
       setSimilarityRank(wizard);
-    }
+    });
     return wizards;
   };
 
@@ -34,30 +40,12 @@
   };
 
   var updateWizards = function (data) {
-    var wizards = data || dataWizards;
+    var wizards = data || window.backend.data();
     clearWizards();
     var similarityBallsWizards = setSimilarityRanks(wizards);
     var sortingData = getSortRank(similarityBallsWizards);
     window.setup.createWizardElements(sortingData);
   };
-
-  var setSimilarityRank = function (wizard) {
-
-    var colorPlayerWizard = window.сhangePlayerColor.getColorPlayerWizard();
-    var similarityBall = 0;
-    if (wizard.colorCoat === colorPlayerWizard.coat) {
-      similarityBall += POINTS_CLOAK_NUMBER;
-    }
-
-    if (wizard.colorEyes === colorPlayerWizard.eyes) {
-      similarityBall += POINTS_EYES_NUMBER;
-    }
-
-    wizard.similarityBall = similarityBall;
-    return wizard;
-  };
-
-  window.backend.load(onLoad, onError);
 
   window.filter = {
     updateWizards: updateWizards,
